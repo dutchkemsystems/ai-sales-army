@@ -7,11 +7,14 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from config import get_settings
 from models import ResearchProfile, Lead
 from integrations.builtwith import BuiltWithAPI
 from integrations.newsapi import NewsAPI
 from integrations.crunchbase import CrunchbaseAPI
 from integrations.clearbit import ClearbitAPI
+
+settings = get_settings()
 
 
 class ResearcherAgent:
@@ -118,7 +121,9 @@ class ResearcherAgent:
 
     def _get_llm(self):
         if self._llm is None:
-            self._llm = ChatOpenAI(model="gpt-4", temperature=0.2)
+            api_key = settings.NVIDIA_NIM_API_KEY or settings.OPENAI_API_KEY
+            base_url = settings.NVIDIA_NIM_BASE_URL if settings.NVIDIA_NIM_API_KEY else None
+            self._llm = ChatOpenAI(model="meta/llama-3.1-70b-instruct", temperature=0.2, api_key=api_key, base_url=base_url)
         return self._llm
 
     def _infer_business_model(self, tech_stack: List[str], news: List[Dict]) -> str:

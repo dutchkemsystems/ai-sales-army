@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/sales_army"
     REDIS_URL: str = "redis://localhost:6379/0"
     OPENAI_API_KEY: str = ""
+    NVIDIA_NIM_API_KEY: str = ""
+    NVIDIA_NIM_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
     SENDGRID_API_KEY: str = ""
     SENDGRID_FROM_EMAIL: str = "sales@yourdomain.com"
     LINKEDIN_ACCESS_TOKEN: str = ""

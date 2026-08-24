@@ -8,7 +8,10 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from config import get_settings
 from models import FollowUpSchedule, FollowUpStatus, OutreachMessage, OutreachChannel
+
+settings = get_settings()
 
 
 class FollowUpAgent:
@@ -71,7 +74,9 @@ class FollowUpAgent:
 
     def _get_llm(self):
         if self._llm is None:
-            self._llm = ChatOpenAI(model="gpt-4", temperature=0.6)
+            api_key = settings.NVIDIA_NIM_API_KEY or settings.OPENAI_API_KEY
+            base_url = settings.NVIDIA_NIM_BASE_URL if settings.NVIDIA_NIM_API_KEY else None
+            self._llm = ChatOpenAI(model="meta/llama-3.1-70b-instruct", temperature=0.6, api_key=api_key, base_url=base_url)
         return self._llm
 
     async def should_stop_followup(self, schedule: FollowUpSchedule, reply_received: bool) -> bool:

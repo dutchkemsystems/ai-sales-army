@@ -7,7 +7,10 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from config import get_settings
 from models import PersonalizedMessage, ResearchProfile, OutreachChannel
+
+settings = get_settings()
 
 
 class PersonalizerAgent:
@@ -86,7 +89,9 @@ class PersonalizerAgent:
 
     def _get_llm(self):
         if self._llm is None:
-            self._llm = ChatOpenAI(model="gpt-4", temperature=0.7)
+            api_key = settings.NVIDIA_NIM_API_KEY or settings.OPENAI_API_KEY
+            base_url = settings.NVIDIA_NIM_BASE_URL if settings.NVIDIA_NIM_API_KEY else None
+            self._llm = ChatOpenAI(model="meta/llama-3.1-70b-instruct", temperature=0.7, api_key=api_key, base_url=base_url)
         return self._llm
 
     async def _generate_subject_line(self, lead: Dict, research: ResearchProfile) -> str:
