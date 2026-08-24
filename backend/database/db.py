@@ -1,14 +1,18 @@
-from sqlalchemy import create_engine, Column, String, Float, Boolean, DateTime, Text, Integer, Date, JSON
+from sqlalchemy import Column, String, Float, Boolean, DateTime, Text, Integer, JSON
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
-from datetime import datetime, date
+from sqlalchemy.orm import DeclarativeBase
+from datetime import datetime
 from typing import Optional
-from config import get_settings
+import os
 
-settings = get_settings()
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 
-engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
-async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+if DATABASE_URL:
+    engine = create_async_engine(DATABASE_URL, echo=False, future=True)
+    async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+else:
+    engine = None
+    async_session = None
 
 
 class Base(DeclarativeBase):
@@ -173,11 +177,16 @@ class UserDB(Base):
 
 
 async def init_db():
+    if engine is None:
+        return
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
 async def get_db():
+    if async_session is None:
+        yield None
+        return
     async with async_session() as session:
         try:
             yield session
