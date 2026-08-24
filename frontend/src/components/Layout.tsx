@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useStore } from '../store'
 import {
   LayoutDashboard, Users, Send, GitBranch, BarChart3,
-  Calendar, Settings, Menu, X, LogOut, Zap
+  Calendar, Settings, Menu, X, LogOut, Zap, Brain
 } from 'lucide-react'
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { path: '/pipeline', label: 'Pipeline', icon: GitBranch },
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/meetings', label: 'Meetings', icon: Calendar },
+  { path: '/insights', label: 'AI Insights', icon: Brain },
   { path: '/settings', label: 'Settings', icon: Settings },
 ]
 

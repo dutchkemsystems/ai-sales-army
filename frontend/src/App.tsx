@@ -7,6 +7,7 @@ import Pipeline from './pages/Pipeline'
 import Analytics from './pages/Analytics'
 import Meetings from './pages/Meetings'
 import Settings from './pages/Settings'
+import Insights from './pages/Insights'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="pipeline" element={<Pipeline />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="meetings" element={<Meetings />} />
+          <Route path="insights" element={<Insights />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
